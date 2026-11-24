@@ -1,0 +1,77 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ReAct 工具集",
+    "description": "本地工具服务：天气查询、数学计算、知识库检索。",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://host.docker.internal:8000" }
+  ],
+  "paths": {
+    "/weather": {
+      "get": {
+        "operationId": "get_weather",
+        "summary": "查询指定城市的实时天气",
+        "description": "查询某个城市当前的天气状况、温度和湿度。国外城市请使用英文名，例如 New York、Tokyo。",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "description": "城市名，如：北京、上海、New York",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "天气查询结果" }
+        }
+      }
+    },
+    "/calculate": {
+      "get": {
+        "operationId": "calculate",
+        "summary": "计算数学表达式",
+        "description": "对数学表达式求值，支持 + - * / % 和括号。凡是涉及数字运算都必须调用本工具，不要心算。不支持乘方。",
+        "parameters": [
+          {
+            "name": "expression",
+            "in": "query",
+            "required": true,
+            "description": "数学表达式，如：(23*4+10)/2",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "计算结果" }
+        }
+      }
+    },
+    "/kb": {
+      "get": {
+        "operationId": "search_knowledge_base",
+        "summary": "检索本地知识库",
+        "description": "在本地智能体综述文档中做语义检索，返回最相关的段落。用于查询 ReAct、工具调用、RAG、规划、多智能体等概念。",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "检索问题或关键词",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "top_k",
+            "in": "query",
+            "required": false,
+            "description": "返回条数，默认 3",
+            "schema": { "type": "integer", "default": 3, "minimum": 1, "maximum": 10 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "检索结果" }
+        }
+      }
+    }
+  }
+}
